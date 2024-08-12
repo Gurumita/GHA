@@ -1,4 +1,5 @@
-name : Ci/Cd pipeline
+name: Ci/Cd pipeline
+
 on:
   push:
     branches:
@@ -11,9 +12,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref =='refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup JDK
@@ -22,15 +23,15 @@ jobs:
           java-version: '22'
           distribution: 'temurin'
 
-      - name: build with maven
+      - name: Build with Maven
         run: mvn clean package --file pom.xml
 
       - name: Run Tests
         run: mvn test
-        if: ${{contains(github.event,head_commit.message,'test_commit')}}
+        if: ${{ contains(github.event.head_commit.message, 'test_commit') }}
 
       - name: Upload to Github
-        if: ${{success()}}
+        if: ${{ success() }}
         uses: actions/upload-artifact@v3
         with:
           name: myapp-jar
