@@ -1,3 +1,44 @@
+#name: Ci/Cd pipeline
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#      - master
+#  pull_request:
+#    branches:
+#      - main
+#
+#jobs:
+#  build:
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Setup JDK
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '22'
+#          distribution: 'temurin'
+#
+#      - name: Build with Maven
+#        run: mvn clean package --file pom.xml
+#
+#      - name: Run Tests
+#        if: ${{ contains(github.event.head_commit.message, 'test_commit') }}
+#        run: mvn test
+#
+#      - name: Upload to Github
+#
+#        if: ${{ success() }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: myapp-jar
+#          path: target/*.jar
+
+
 name: Ci/Cd pipeline
 
 on:
@@ -11,7 +52,7 @@ on:
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/main'
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -27,13 +68,13 @@ jobs:
         run: mvn clean package --file pom.xml
 
       - name: Run Tests
-        if: ${{ contains(github.event.head_commit.message, 'test_commit') }}
+        if: ${{ contains(github.event.head_commit.message, 'test_commit') && github.event_name == 'push' }}
         run: mvn test
 
       - name: Upload to Github
-
-        if: ${{ success() }}
+        if: ${{ success() && github.event_name == 'push' }}
         uses: actions/upload-artifact@v3
         with:
           name: myapp-jar
           path: target/*.jar
+
