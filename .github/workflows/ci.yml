@@ -11,8 +11,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,10 +27,11 @@ jobs:
         run: mvn clean package --file pom.xml
 
       - name: Run Tests
-        run: mvn test
         if: ${{ contains(github.event.head_commit.message, 'test_commit') }}
+        run: mvn test
 
       - name: Upload to Github
+
         if: ${{ success() }}
         uses: actions/upload-artifact@v3
         with:
