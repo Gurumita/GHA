@@ -31,6 +31,7 @@ jobs:
         run: mvn test
 
       - name: Check Results
+        if: ${{ github.actor =='Gurumita'}}
         run: |
           echo "event = ${{github.event_name}}"
           echo "Repository = ${{github.repository}}"
