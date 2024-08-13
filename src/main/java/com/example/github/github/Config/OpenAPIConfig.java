@@ -1,4 +1,4 @@
-package com.example.GHA.GHA.config;
+package com.example.github.github.Config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
